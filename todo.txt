@@ -1,0 +1,12 @@
+version: 0.1=>
+
+create repository
+make a file index.html.
+write style for that page.
+server home page.
+
+Home Page content:
+Title "Flower Catalog" at the top.
+Image of flowers
+Links to pages of Abeliophyllum, Ageratum and a guest book.
+

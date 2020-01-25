@@ -1,0 +1,26 @@
+#header {
+  font-family: sans-serif;
+  margin-top: 2vw;
+  font-size: 2vw;
+  color: f3a718;
+  margin-right: 25vw;
+  text-align: right;
+}
+
+#container {
+  display: flex;
+}
+
+#descriptions {
+  margin-top: 15vw;
+  margin-left: 1vw;
+}
+
+#animatedJug {
+  margin-left: 6vw;
+}
+
+#image {
+  display: flex;
+  height: 100%;
+}

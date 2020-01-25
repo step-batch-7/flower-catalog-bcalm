@@ -1,0 +1,19 @@
+#header {
+  text-align: right;
+
+  margin-top: 2vw;
+  font-family: sans-serif;
+  font-size: 2vw;
+  color: f3a718;
+  margin-right: 40vw;
+  text-align: right;
+}
+
+#container {
+  display: flex;
+}
+
+#description {
+  margin: 18vw 2vw;
+  text-align: justify;
+}

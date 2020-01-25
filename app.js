@@ -30,6 +30,10 @@ const serveHomePage = function(req) {
 };
 
 const processRequest = function(req) {
+  console.log(
+    req.url,
+    "//////////////////////////////////////.................................////////////////////"
+  );
   if (req.method === "GET" && req.url === "/") return serveHomePage;
   if (req.method === "GET") return serveStaticFile;
 };

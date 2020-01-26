@@ -24,11 +24,13 @@ const serveStaticFile = req => {
 };
 
 const createContent = function(commentDetails, newDetail) {
+  const name = newDetail.name.replace(/\+/g, " ");
+  const comment = newDetail.comment.replace(/\+/g, " ");
   return (commentDetails += `
   <tr>
     <td>${JSON.stringify(newDetail.date)}</td>
-    <td>${newDetail.name}</td>
-    <td>${newDetail.comment}</td>
+    <td>${name}</td>
+    <td>${comment}</td>
   </tr>`);
 };
 

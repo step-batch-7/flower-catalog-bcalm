@@ -1,5 +1,6 @@
 const { Server } = require("net");
 const Request = require("./public/lib/request");
+const updateComment = require("./public/main");
 const { processRequest } = require("./app.js");
 
 const handleConnection = function(socket) {
@@ -17,7 +18,7 @@ const handleConnection = function(socket) {
     res.writeTo(socket);
   });
 };
-const main = (port = 4000) => {
+const main = (port = 8080) => {
   const server = new Server();
   server.on("error", err => console.error("server error", err));
   server.on("connection", handleConnection);

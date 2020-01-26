@@ -1,0 +1,38 @@
+#body {
+  margin: 2vw;
+  font-family: Arial, Helvetica, sans-serif;
+}
+#header {
+  text-align: right;
+  margin-top: 2vw;
+  font-family: sans-serif;
+  font-size: 2vw;
+  color: f3a718;
+  margin-right: 40vw;
+  text-align: right;
+}
+
+#comment {
+  margin-top: 2vw;
+  font-size: 2vw;
+}
+
+#submit {
+  outline: none;
+  border-radius: 0.5vw;
+  font-size: 1vw;
+  margin: 1vw;
+}
+
+#input {
+  font-size: 1.5vw;
+}
+
+.userText {
+  outline: none;
+  font-size: 1vw;
+}
+
+td {
+  padding-right: 150px;
+}

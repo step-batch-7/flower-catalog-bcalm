@@ -5,7 +5,11 @@ const contentTypes = require("./public/lib/mimeTypes.js");
 const STATIC_FOLDER = `${__dirname}/public`;
 
 const serveStaticFile = req => {
+  if (req.url === "/") {
+    req.url = "/html/index.html";
+  }
   const path = `${STATIC_FOLDER}${req.url}`;
+  console.log(path);
   const stat = fs.existsSync(path) && fs.statSync(path);
   if (!stat || !stat.isFile()) return new Response();
   const [, extension] = path.match(/.*\.(.*)$/) || [];
@@ -19,8 +23,28 @@ const serveStaticFile = req => {
   return res;
 };
 
-const serveHomePage = function(req) {
-  const html = fs.readFileSync("./public/html/index.html", "utf8");
+const createContent = function(commentDetails, newDetail) {
+  return (commentDetails += `
+  <tr>
+    <td>${JSON.stringify(newDetail.date)}</td>
+    <td>${newDetail.name}</td>
+    <td>${newDetail.comment}</td>
+  </tr>`);
+};
+
+const updateComment = function(req) {
+  const commentFile = JSON.parse(fs.readFileSync("./public/resources/commentList.json", "utf8"));
+  if (req.method === "POST") {
+    const name = req.body.name;
+    const comment = req.body.comment;
+    const date = new Date();
+    const commentDetail = { name, comment, date };
+    commentFile.unshift(commentDetail);
+    fs.writeFileSync("./public/resources/commentList.json", JSON.stringify(commentFile));
+  }
+  const guestBook = fs.readFileSync("./public/html/guestBook.html", "utf8");
+  const content = commentFile.reduce(createContent, "");
+  const html = guestBook.replace(/__comment__/, content);
   const res = new Response();
   res.setHeader("Content-Type", contentTypes.html);
   res.setHeader("Content-Length", html.length);
@@ -30,7 +54,7 @@ const serveHomePage = function(req) {
 };
 
 const processRequest = function(req) {
-  if (req.method === "GET" && req.url === "/") return serveHomePage;
+  if (req.url === "/html/guestBook.html") return updateComment;
   if (req.method === "GET") return serveStaticFile;
 };
 

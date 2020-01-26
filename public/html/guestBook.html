@@ -1,0 +1,41 @@
+<html lang="en">
+  <head>
+    <link rel="stylesheet" href="../css/guestBook.css" />
+    <title>Guest Book</title>
+  </head>
+  <body>
+    <div id="body">
+      <div id="header"><a href="/"><<</a>&nbsp;&nbsp;Guest book</div>
+      <div id="comment">
+        <b>
+          Leave a comment
+        </b>
+      </div>
+      <div id="input">
+        <form action="#" method="POST">
+          Name:
+          <textarea name="name" id="" cols="30" rows="2" autofocus class="userText"></textarea>
+          <br />
+          Comment: <textarea name="comment" id="" cols="30" rows="5" class="userText"></textarea>
+          <br />
+          <button id="submit">SUBMIT</button>
+        </form>
+        <hr />
+        <div>
+          <table>
+            <thead>
+              <tr>
+                <td>DATETIME</td>
+                <td>NAME</td>
+                <td>COMMENT_LIST</td>
+              </tr>
+            </thead>
+            <tbody>
+              __comment__
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

@@ -26,23 +26,23 @@ const serveStaticFile = req => {
 };
 
 const parseContent = function(content) {
-  const date = content.date.toDateString();
-  const time = content.date.toLocaleTimeString();
   const formattedContent = {};
   formattedContent.name = content.name.replace(/\+/g, ' ');
   formattedContent.name = decodeURIComponent(formattedContent.name);
   formattedContent.comment = content.comment.replace(/\+/g, ' ');
   formattedContent.comment = decodeURIComponent(formattedContent.comment);
-  formattedContent.date = `${date} ${time}`;
+  formattedContent.date = content.date;
   return formattedContent;
 };
 
 const createContent = function(commentDetails, commentList) {
   const name = commentList.name.replace(/\r\n/, '<br/>');
   const comment = commentList.comment.replace(/\r\n/, '<br/>');
+  const date = new Date(commentList.date).toDateString();
+  const time = new Date(commentList.date).toLocaleTimeString();
   commentDetails += `
   <tr>
-    <td>${commentList.date}</td>
+    <td>${date} ${time}</td>
     <td>${name}</td>
     <td>${comment}</td>
   </tr>`;

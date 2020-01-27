@@ -4,25 +4,31 @@ const contentTypes = require('./lib/mimeTypes.js');
 
 const STATIC_FOLDER = `${__dirname}/public`;
 
+const createResponse = function(content, contentType, statusCode) {
+  const res = new Response();
+  res.setHeader('Content-Type', contentType);
+  res.setHeader('Content-Length', content.length);
+  res.statusCode = statusCode;
+  res.body = content;
+  return res;
+};
+
+// eslint-disable-next-line complexity
 const serveStaticFile = req => {
   if (req.url === '/') {
     req.url = '/html/index.html';
   }
+
   const path = `${STATIC_FOLDER}${req.url}`;
-  console.log(path);
   const stat = fs.existsSync(path) && fs.statSync(path);
   if (!stat || !stat.isFile()) {
     return new Response();
   }
+
   const [, extension] = path.match(/.*\.(.*)$/) || [];
   const contentType = contentTypes[extension];
   const content = fs.readFileSync(path);
-  const res = new Response();
-  res.setHeader('Content-Type', contentType);
-  res.setHeader('Content-Length', content.length);
-  res.statusCode = 200;
-  res.body = content;
-  return res;
+  return createResponse(content, contentType, 200);
 };
 
 const parseContent = function(content) {
@@ -49,6 +55,7 @@ const createContent = function(commentDetails, commentList) {
   return commentDetails;
 };
 
+// eslint-disable-next-line max-statements
 const updateComment = function(req) {
   const commentFile = JSON.parse(fs.readFileSync('./dataBase/commentList.json', 'utf8'));
   if (req.method === 'POST') {

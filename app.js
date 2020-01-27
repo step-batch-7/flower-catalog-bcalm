@@ -34,11 +34,13 @@ const parseContent = function(content) {
 };
 
 const createContent = function(commentDetails, commentList) {
+  const name = commentList.name.replace(/\r\n/, "<br/>");
+  const comment = commentList.comment.replace(/\r\n/, "<br/>");
   return (commentDetails += `
   <tr>
     <td>${commentList.date}</td>
-    <td>${commentList.name}</td>
-    <td>${commentList.comment}</td>
+    <td>${name}</td>
+    <td>${comment}</td>
   </tr>`);
 };
 

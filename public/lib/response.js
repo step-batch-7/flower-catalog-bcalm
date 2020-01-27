@@ -1,12 +1,12 @@
 class Response {
   constructor() {
     this.statusCode = 404;
-    this.headers = [{ key: 'Content-Length', value: 0 }];
+    this.headers = [{key: 'Content-Length', value: 0}];
   }
   setHeader(key, value) {
-    let header = this.headers.find(h => h.key === key);
-    if (header) header.value = value;
-    else this.headers.push({ key, value })
+    const header = this.headers.find(h => h.key === key);
+    if (header) {header.value = value;}
+    else {this.headers.push({key, value});}
   }
   generateHeadersText() {
     const lines = this.headers.map(header => `${header.key}: ${header.value}`);

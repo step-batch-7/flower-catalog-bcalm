@@ -1,14 +1,14 @@
-const pickupParams = (query,keyValue)=>{
-  const [key,value] = keyValue.split('=');
+const pickupParams = (query, keyValue) => {
+  const [key, value] = keyValue.split('=');
   query[key] = value;
   return query;
 };
-const readParams = keyValueTextPairs => keyValueTextPairs.split('&').reduce(pickupParams,{});
-const parseQueryParameters = entireUrl =>{
-  const [url,queryText] = entireUrl.split('?');
+const readParams = keyValueTextPairs => keyValueTextPairs.split('&').reduce(pickupParams, {});
+const parseQueryParameters = entireUrl => {
+  const [url, queryText] = entireUrl.split('?');
   const query = queryText && readParams(queryText);
-  return {url,query};
-}
+  return {url, query};
+};
 const collectHeadersAndContent = (result, line) => {
   if (line === '') {
     result.body = '';
@@ -33,12 +33,12 @@ class Request {
   static parse(requestText) {
     const [requestLine, ...headersAndBody] = requestText.split('\r\n');
     const [method, entireUrl, protocol] = requestLine.split(' ');
-    const {url,query} = parseQueryParameters(entireUrl);
-    let { headers, body } = headersAndBody.reduce(collectHeadersAndContent, { headers: {} });
+    const {url, query} = parseQueryParameters(entireUrl);
+    let {headers, body} = headersAndBody.reduce(collectHeadersAndContent, {headers: {}});
     if(headers['Content-Type'] === 'application/x-www-form-urlencoded'){
       body = readParams(body);
     }
-    const req =  new Request(method, url, query, headers, body);
+    const req = new Request(method, url, query, headers, body);
     console.warn(req);
     return req;
   }

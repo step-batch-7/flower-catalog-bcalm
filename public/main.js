@@ -1,7 +1,8 @@
 const removeJug = function() {
-  const jug = document.getElementById("animatedJug");
-  jug.style.visibility = "hidden";
+  const timeToAppear = 1000;
+  const jug = document.getElementById('animatedJug');
+  jug.style.visibility = 'hidden';
   setTimeout(() => {
-    jug.style.visibility = "visible";
-  }, 1000);
+    jug.style.visibility = 'visible';
+  }, timeToAppear);
 };

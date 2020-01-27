@@ -23,14 +23,22 @@ const serveStaticFile = req => {
   return res;
 };
 
-const createContent = function(commentDetails, newDetail) {
-  const name = newDetail.name.replace(/\+/g, " ");
-  const comment = newDetail.comment.replace(/\+/g, " ");
+const parseContent = function(content) {
+  const formattedContent = {};
+  formattedContent.name = content.name.replace(/\+/g, " ");
+  formattedContent.name = decodeURIComponent(formattedContent.name);
+  formattedContent.comment = content.comment.replace(/\+/g, " ");
+  formattedContent.comment = decodeURIComponent(formattedContent.comment);
+  formattedContent.date = `${content.date.toDateString()} ${content.date.toLocaleTimeString()}`;
+  return formattedContent;
+};
+
+const createContent = function(commentDetails, commentList) {
   return (commentDetails += `
   <tr>
-    <td>${JSON.stringify(newDetail.date)}</td>
-    <td>${name}</td>
-    <td>${comment}</td>
+    <td>${commentList.date}</td>
+    <td>${commentList.name}</td>
+    <td>${commentList.comment}</td>
   </tr>`);
 };
 
@@ -40,7 +48,7 @@ const updateComment = function(req) {
     const name = req.body.name;
     const comment = req.body.comment;
     const date = new Date();
-    const commentDetail = { name, comment, date };
+    const commentDetail = parseContent({ name, comment, date });
     commentFile.unshift(commentDetail);
     fs.writeFileSync("./public/resources/commentList.json", JSON.stringify(commentFile));
   }

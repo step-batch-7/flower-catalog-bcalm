@@ -35,4 +35,6 @@
 
 td {
   padding-right: 2vw;
+  border: 1px solid black;
+  margin-right: 1vw;
 }

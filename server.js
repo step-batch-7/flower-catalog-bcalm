@@ -1,5 +1,5 @@
 const {Server} = require('net');
-const Request = require('./public/lib/request');
+const Request = require('./lib/request');
 const {processRequest} = require('./app.js');
 
 const handleConnection = function(socket) {

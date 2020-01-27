@@ -1,6 +1,6 @@
 const fs = require('fs');
-const Response = require('./public/lib/response.js');
-const contentTypes = require('./public/lib/mimeTypes.js');
+const Response = require('./lib/response.js');
+const contentTypes = require('./lib/mimeTypes.js');
 
 const STATIC_FOLDER = `${__dirname}/public`;
 
@@ -50,14 +50,14 @@ const createContent = function(commentDetails, commentList) {
 };
 
 const updateComment = function(req) {
-  const commentFile = JSON.parse(fs.readFileSync('./public/resources/commentList.json', 'utf8'));
+  const commentFile = JSON.parse(fs.readFileSync('./dataBase/commentList.json', 'utf8'));
   if (req.method === 'POST') {
     const name = req.body.name;
     const comment = req.body.comment;
     const date = new Date();
     const commentDetail = parseContent({name, comment, date});
     commentFile.unshift(commentDetail);
-    fs.writeFileSync('./public/resources/commentList.json', JSON.stringify(commentFile));
+    fs.writeFileSync('./dataBase/commentList.json', JSON.stringify(commentFile));
   }
   const guestBook = fs.readFileSync('./public/html/guestBook.html', 'utf8');
   const content = commentFile.reduce(createContent, '');

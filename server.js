@@ -1,5 +1,5 @@
 const http = require('http');
-const {app} = require('./app');
+const {app} = require('./handler');
 
 const port = 80;
 

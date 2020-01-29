@@ -10,7 +10,8 @@ const fileNotFound = function() {
       <title>NOT FOUND</title>
     </head>
     <body>
-      <h4>requested resource is not found on the server</h4>
+      <h1>The file which you want to search is not available.</br> </h1>
+      <h2>Please go back to home Page<h2>
     </body>
   </html>`;
   const statusCode = 404;

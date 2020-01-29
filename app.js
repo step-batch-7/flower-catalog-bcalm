@@ -1,49 +1,40 @@
 const fs = require('fs');
-const Response = require('./lib/response.js');
+const queryString = require('querystring');
 const contentTypes = require('./lib/mimeTypes.js');
 
 const STATIC_FOLDER = `${__dirname}/public`;
 
-const createResponse = function(content, contentType, statusCode) {
-  const res = new Response();
-  res.setHeader('Content-Type', contentType);
-  res.setHeader('Content-Length', content.length);
-  res.statusCode = statusCode;
-  res.body = content;
-  return res;
+const fileNotFound = function() {
+  const content = `<html>
+    <head>
+      <title>NOT FOUND</title>
+    </head>
+    <body>
+      <h4>requested resource is not found on the server</h4>
+    </body>
+  </html>`;
+  const statusCode = 404;
+  const contentType = 'text/html';
+  return {statusCode, content, contentType};
 };
 
-// eslint-disable-next-line complexity
 const serveStaticFile = req => {
-  if (req.url === '/') {
-    req.url = '/html/index.html';
-  }
-
+  req.url = req.url === '/' ? '/html/index.html' : req.url;
   const path = `${STATIC_FOLDER}${req.url}`;
   const stat = fs.existsSync(path) && fs.statSync(path);
   if (!stat || !stat.isFile()) {
-    return new Response();
+    return fileNotFound();
   }
-
   const [, extension] = path.match(/.*\.(.*)$/) || [];
   const contentType = contentTypes[extension];
   const content = fs.readFileSync(path);
-  return createResponse(content, contentType, 200);
+  const statusCode = 200;
+  return {statusCode, content, contentType};
 };
 
-const parseContent = function(content) {
-  const formattedContent = {};
-  formattedContent.name = content.name.replace(/\+/g, ' ');
-  formattedContent.name = decodeURIComponent(formattedContent.name);
-  formattedContent.comment = content.comment.replace(/\+/g, ' ');
-  formattedContent.comment = decodeURIComponent(formattedContent.comment);
-  formattedContent.date = content.date;
-  return formattedContent;
-};
-
-const createContent = function(commentDetails, commentList) {
-  const name = commentList.name.replace(/\r\n/, '<br/>');
-  const comment = commentList.comment.replace(/\r\n/, '<br/>');
+const createTable = function(commentDetails, commentList) {
+  const name = commentList.name.replace(/\r\n/g, '<br/>');
+  const comment = commentList.comment.replace(/\r\n/g, '<br/>');
   const date = new Date(commentList.date).toDateString();
   const time = new Date(commentList.date).toLocaleTimeString();
   commentDetails += `
@@ -55,35 +46,55 @@ const createContent = function(commentDetails, commentList) {
   return commentDetails;
 };
 
-// eslint-disable-next-line max-statements
-const updateComment = function(req) {
-  const commentFile = JSON.parse(fs.readFileSync('./dataBase/commentList.json', 'utf8'));
-  if (req.method === 'POST') {
-    const name = req.body.name;
-    const comment = req.body.comment;
-    const date = new Date();
-    const commentDetail = parseContent({name, comment, date});
-    commentFile.unshift(commentDetail);
-    fs.writeFileSync('./dataBase/commentList.json', JSON.stringify(commentFile));
-  }
-  const guestBook = fs.readFileSync('./public/html/guestBook.html', 'utf8');
-  const content = commentFile.reduce(createContent, '');
-  const html = guestBook.replace(/__comment__/, content);
-  const res = new Response();
-  res.setHeader('Content-Type', contentTypes.html);
-  res.setHeader('Content-Length', html.length);
-  res.statusCode = 200;
-  res.body = html;
-  return res;
+const getComment = function() {
+  const filePath = './dataBase/commentList.json';
+  if (!fs.existsSync(filePath)) return [];
+  return JSON.parse(fs.readFileSync(filePath, 'utf8'));
 };
 
-const processRequest = function(req) {
-  if (req.url === '/html/guestBook.html') {
-    return updateComment;
-  }
-  if (req.method === 'GET') {
-    return serveStaticFile;
-  }
+const serveGuestPage = function(req) {
+  const commentFile = getComment();
+  const path = `${STATIC_FOLDER}${req.url}`;
+  const guestBook = fs.readFileSync(path, 'utf8');
+  const allComment = commentFile.reduce(createTable, '');
+  const content = guestBook.replace(/__comment__/, allComment);
+  const contentType = 'text/html';
+  const statusCode = 200;
+  return {statusCode, content, contentType};
 };
 
-module.exports = {processRequest};
+const updateComment = function(req, data) {
+  const path = './dataBase/commentList.json';
+  const commentFile = getComment();
+  const date = new Date();
+  const commentDetail = queryString.parse(data);
+  const name = commentDetail.name;
+  const comment = commentDetail.comment;
+  commentFile.unshift({name, date, comment});
+  fs.writeFileSync(path, JSON.stringify(commentFile));
+  return serveGuestPage(req);
+};
+
+const getHandlers = {
+  '/html/guestBook.html': serveGuestPage,
+  other: serveStaticFile
+};
+
+const postHandlers = {
+  '/html/guestBook.html': updateComment
+};
+
+const methods = {
+  GET: getHandlers,
+  POST: postHandlers
+};
+
+const getResponse = function(req, data) {
+  const handlers = methods[req.method];
+  const handler = handlers[req.url] || handlers.other;
+  const {statusCode, content, contentType} = handler(req, data);
+  const header = {'content-type': contentType || 'text/html'};
+  return {content, statusCode, header};
+};
+
+module.exports = {getResponse};

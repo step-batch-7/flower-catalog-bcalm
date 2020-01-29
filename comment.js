@@ -1,5 +1,4 @@
 const fs = require('fs');
-const queryString = require('querystring');
 
 class Comment {
   constructor() {
@@ -14,10 +13,9 @@ class Comment {
     }
     return JSON.parse(fs.readFileSync(this.path, 'utf8'));
   }
-  save(data) {
+  save(commentDetail) {
     const commentFile = this.getComment();
     this.date = new Date();
-    const commentDetail = queryString.parse(data);
     this.name = commentDetail.name;
     this.comment = commentDetail.comment;
     const {name, comment, date} = this;

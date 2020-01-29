@@ -1,4 +1,5 @@
 const fs = require('fs');
+const queryString = require('querystring');
 const {App} = require('./lib/app');
 const {CommentFormatter, Comment} = require('./comment');
 const contentTypes = require('./lib/mimeTypes.js');
@@ -56,6 +57,9 @@ const readBody = function(req, res, next) {
     data += chunk;
   });
   req.on('end', () => {
+    if (req.headers['content-type'] === 'application/x-www-form-urlencoded') {
+      data = queryString.parse(data);
+    }
     req.body = data;
     next();
   });

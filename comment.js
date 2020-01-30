@@ -1,5 +1,17 @@
 const fs = require('fs');
 
+const readFile = function(path, encoding) {
+  return JSON.parse(fs.readFileSync(path, encoding));
+};
+
+const isFileExists = function(path) {
+  return fs.existsSync(path);
+};
+
+const writeFile = function(path, content) {
+  fs.writeFileSync(path, content);
+};
+
 class Comment {
   constructor() {
     this.name = '';
@@ -8,10 +20,10 @@ class Comment {
     this.path = './dataBase/commentList.json';
   }
   getComment() {
-    if (!fs.existsSync(this.path)) {
+    if (!isFileExists(this.path)) {
       return [];
     }
-    return JSON.parse(fs.readFileSync(this.path, 'utf8'));
+    return readFile(this.path, 'utf8');
   }
   save(commentDetail) {
     const commentFile = this.getComment();
@@ -21,7 +33,7 @@ class Comment {
     const {name, comment, date} = this;
     const commentList = {name, date, comment};
     commentFile.unshift(commentList);
-    fs.writeFileSync(this.path, JSON.stringify(commentFile));
+    writeFile(this.path, JSON.stringify(commentFile));
   }
 }
 
@@ -38,7 +50,7 @@ class CommentFormatter {
     this.name = commentDetail.name.replace(/\r\n/g, '<br/>');
     this.comment = commentDetail.comment.replace(/\r\n/g, '<br/>');
     this.date = new Date(commentDetail.date).toDateString();
-    this.date += new Date(commentDetail.date).toLocaleTimeString();
+    this.date += ' ' + new Date(commentDetail.date).toLocaleTimeString();
     return [
       `
   <tr>

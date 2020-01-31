@@ -1,0 +1,29 @@
+{
+  "name": "flower-catalog-bcalm",
+  "version": "1.0.0",
+  "description": "",
+  "main": "comment.js",
+  "directories": {
+    "doc": "docs",
+    "lib": "lib"
+  },
+  "scripts": {
+    "test": "mocha",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/step-batch-7/flower-catalog-bcalm.git"
+  },
+  "author": "Vikram Singh",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/step-batch-7/flower-catalog-bcalm/issues"
+  },
+  "homepage": "https://github.com/step-batch-7/flower-catalog-bcalm#readme",
+  "devDependencies": {
+    "mocha": "^7.0.1",
+    "nyc": "^15.0.0",
+    "supertest": "^4.0.2"
+  }
+}

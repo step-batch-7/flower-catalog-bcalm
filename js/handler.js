@@ -31,7 +31,7 @@ const serveStaticFile = (req, res, next) => {
   if (isFileExists(path)) {
     return next();
   }
-  const [, extension] = path.match(/.*\.(.*)$/) || [];
+  const [, extension] = path.match(/.*\.(.*)$/);
   const contentType = contentTypes[extension];
   const content = fs.readFileSync(path);
   sendResponse(res, content, contentType);

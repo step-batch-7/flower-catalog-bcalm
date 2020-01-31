@@ -3,6 +3,7 @@ const queryString = require('querystring');
 const {App} = require('../lib/app');
 const {CommentFormatter, Comment} = require('./comment');
 const contentTypes = require('../lib/mimeTypes.js');
+const {COMMENT_PATH} = require('../configuration');
 
 const STATIC_FOLDER = `${__dirname}/../public`;
 const isFileExists = function(path) {
@@ -37,8 +38,8 @@ const serveStaticFile = (req, res, next) => {
   sendResponse(res, content, contentType);
 };
 
-const serveGuestPage = function(req, res, next, commentFilePath) {
-  const commentFormatter = new CommentFormatter(commentFilePath);
+const serveGuestPage = function(req, res) {
+  const commentFormatter = new CommentFormatter(COMMENT_PATH);
   const commentFile = commentFormatter.getComment();
   const path = `${STATIC_FOLDER}${req.url}`;
   const guestBook = fs.readFileSync(path, 'utf8');
@@ -65,8 +66,8 @@ const readBody = function(req, res, next) {
   });
 };
 
-const updateComment = function(req, res, next, commentFilePath) {
-  const comment = new Comment(commentFilePath);
+const updateComment = function(req, res) {
+  const comment = new Comment(COMMENT_PATH);
   comment.save(req.body);
   const statusCode = 303;
   res.writeHead(statusCode, {location: 'guestBook.html'});

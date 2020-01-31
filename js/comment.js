@@ -14,9 +14,6 @@ const isFileExist = function(filePath) {
 
 class Comment {
   constructor(path) {
-    // this.name = '';
-    // this.comment = '';
-    // this.date = '';
     this.path = path;
   }
   getComment() {

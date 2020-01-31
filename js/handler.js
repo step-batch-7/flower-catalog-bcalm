@@ -37,8 +37,8 @@ const serveStaticFile = (req, res, next) => {
   sendResponse(res, content, contentType);
 };
 
-const serveGuestPage = function(req, res, next) {
-  const commentFormatter = new CommentFormatter();
+const serveGuestPage = function(req, res, next, commentFilePath) {
+  const commentFormatter = new CommentFormatter(commentFilePath);
   const commentFile = commentFormatter.getComment();
   const path = `${STATIC_FOLDER}${req.url}`;
   const guestBook = fs.readFileSync(path, 'utf8');
@@ -65,8 +65,8 @@ const readBody = function(req, res, next) {
   });
 };
 
-const updateComment = function(req, res) {
-  const comment = new Comment();
+const updateComment = function(req, res, next, commentFilePath) {
+  const comment = new Comment(commentFilePath);
   comment.save(req.body);
   const statusCode = 303;
   res.writeHead(statusCode, {location: 'guestBook.html'});

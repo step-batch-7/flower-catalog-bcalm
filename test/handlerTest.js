@@ -3,7 +3,8 @@ const {app} = require('../js/handler');
 
 describe('/GET', () => {
   it('should give index.html', done => {
-    request(app.serve.bind(app))
+    const filePath = './testFile.json';
+    request((req, res) => app.serve(req, res, filePath))
       .get('/')
       .expect(200)
       .expect('content-type', 'text/html')
@@ -13,7 +14,8 @@ describe('/GET', () => {
   });
 
   it('should give ageratum File content', done => {
-    request(app.serve.bind(app))
+    const filePath = './testFile.json';
+    request((req, res) => app.serve(req, res, filePath))
       .get('/html/Ageratum.html')
       .expect(200)
       .expect('content-type', 'text/html')
@@ -22,8 +24,9 @@ describe('/GET', () => {
       .expect(/Ageratum/, done);
   });
 
-  it('should give ageratum File content', done => {
-    request(app.serve.bind(app))
+  it('should give abeliophyllum File content', done => {
+    const filePath = './testFile.json';
+    request((req, res) => app.serve(req, res, filePath))
       .get('/html/Abeliophyllum.html')
       .expect(200)
       .expect('content-type', 'text/html')
@@ -33,7 +36,8 @@ describe('/GET', () => {
   });
 
   it('should give css File content', done => {
-    request(app.serve.bind(app))
+    const filePath = './testFile.json';
+    request((req, res) => app.serve(req, res, filePath))
       .get('/css/flower.css')
       .expect(200)
       .expect('content-type', 'text/css')
@@ -43,7 +47,8 @@ describe('/GET', () => {
   });
 
   it('guestPage.html should give dynamic guestPages', function(done) {
-    request(app.serve.bind(app))
+    const filePath = './testFile.json';
+    request((req, res) => app.serve(req, res, filePath))
       .get('/html/guestBook.html')
       .expect(200)
       .expect('Content-Type', 'text/html')
@@ -52,7 +57,8 @@ describe('/GET', () => {
   });
 
   it('should give NOT FOUND response for nonExisting file', function(done) {
-    request(app.serve.bind(app))
+    const filePath = './testFile.json';
+    request((req, res) => app.serve(req, res, filePath))
       .get('/doesNotExist')
       .expect(404, done);
   });
@@ -60,7 +66,8 @@ describe('/GET', () => {
 
 describe('POST comments', function() {
   it('should show guestBook page content', function(done) {
-    request(app.serve.bind(app))
+    const filePath = './testFile.json';
+    request((req, res) => app.serve(req, res, filePath))
       .post('/html/guestBook.html')
       .send('name=vikram&comment=hello')
       .expect(303, done);
@@ -69,7 +76,8 @@ describe('POST comments', function() {
 
 describe('PUT comments', function() {
   it('should say method not allowed', function(done) {
-    request(app.serve.bind(app))
+    const filePath = './testFile.json';
+    request((req, res) => app.serve(req, res, filePath))
       .put('/html/guestBook.html')
       .expect(400, done);
   });

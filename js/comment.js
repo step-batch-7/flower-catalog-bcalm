@@ -8,14 +8,21 @@ const writeFile = function(path, content) {
   fs.writeFileSync(path, content);
 };
 
+const isFileExist = function(filePath) {
+  return fs.existsSync(filePath);
+};
+
 class Comment {
-  constructor() {
-    this.name = '';
-    this.comment = '';
-    this.date = '';
-    this.path = './dataBase/commentList.json';
+  constructor(path) {
+    // this.name = '';
+    // this.comment = '';
+    // this.date = '';
+    this.path = path;
   }
   getComment() {
+    if (!isFileExist(this.path)) {
+      return [];
+    }
     return readFile(this.path, 'utf8');
   }
   save(commentDetail) {
@@ -31,8 +38,8 @@ class Comment {
 }
 
 class CommentFormatter {
-  constructor() {
-    this.comment = new Comment();
+  constructor(filePath) {
+    this.comment = new Comment(filePath);
   }
 
   getComment() {

@@ -1,11 +1,12 @@
 const redis = require('redis');
+const url = process.env.REDIS_URL || '6379';
 
 class Comment {
   constructor(path) {
     this.path = path;
   }
   getComment() {
-    const client = redis.createClient();
+    const client = redis.createClient(url);
     return new Promise(resolve => {
       client.get('comments', (err, data) => {
         const comment = JSON.parse(data) || [];

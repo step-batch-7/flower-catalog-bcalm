@@ -6,3 +6,7 @@ const removeJug = function() {
     jug.style.visibility = 'visible';
   }, timeToAppear);
 };
+
+fetch('localhost:80/html/guestBook.html', {method: 'get'})
+  .then(res => res.json())
+  .then(json => console.log(json));

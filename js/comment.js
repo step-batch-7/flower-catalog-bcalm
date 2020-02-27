@@ -1,36 +1,30 @@
-const fs = require('fs');
-
-const readFile = function(path, encoding) {
-  return JSON.parse(fs.readFileSync(path, encoding));
-};
-
-const writeFile = function(path, content) {
-  fs.writeFileSync(path, content);
-};
-
-const isFileExist = function(filePath) {
-  return fs.existsSync(filePath);
-};
+const redis = require('redis');
 
 class Comment {
   constructor(path) {
     this.path = path;
   }
   getComment() {
-    if (!isFileExist(this.path)) {
-      return [];
-    }
-    return readFile(this.path, 'utf8');
+    const client = redis.createClient();
+    return new Promise(resolve => {
+      client.get('comments', (err, data) => {
+        const comment = JSON.parse(data) || [];
+        resolve(comment);
+      });
+      client.quit();
+    });
   }
-  save(commentDetail) {
-    const commentFile = this.getComment();
+  async save(commentDetail) {
+    const commentFile = await this.getComment();
     this.date = new Date();
     this.name = commentDetail.name;
     this.comment = commentDetail.comment;
     const {name, comment, date} = this;
     const commentList = {name, date, comment};
     commentFile.unshift(commentList);
-    writeFile(this.path, JSON.stringify(commentFile));
+    const client = redis.createClient();
+    client.set('comments', JSON.stringify(commentFile));
+    client.quit();
   }
 }
 
@@ -39,8 +33,8 @@ class CommentFormatter {
     this.comment = new Comment(filePath);
   }
 
-  getComment() {
-    return this.comment.getComment();
+  async getComment() {
+    return await this.comment.getComment();
   }
 
   template(commentDetail) {

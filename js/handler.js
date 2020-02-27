@@ -38,9 +38,10 @@ const serveStaticFile = (req, res, next) => {
   sendResponse(res, content, contentType);
 };
 
-const serveGuestPage = function(req, res) {
+const serveGuestPage = async function(req, res) {
   const commentFormatter = new CommentFormatter(COMMENT_PATH);
-  const commentFile = commentFormatter.getComment();
+  const comment = new Comment(COMMENT_PATH);
+  const commentFile = await comment.getComment();
   const path = `${STATIC_FOLDER}${req.url}`;
   const guestBook = fs.readFileSync(path, 'utf8');
   const allComment = commentFile
@@ -66,9 +67,9 @@ const readBody = function(req, res, next) {
   });
 };
 
-const updateComment = function(req, res) {
+const updateComment = async function(req, res) {
   const comment = new Comment(COMMENT_PATH);
-  comment.save(req.body);
+  await comment.save(req.body);
   const statusCode = 303;
   res.writeHead(statusCode, {location: 'guestBook.html'});
   res.end();

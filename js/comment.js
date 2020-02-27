@@ -9,12 +9,13 @@ class Comment {
     const client = redis.createClient(url);
     return new Promise(resolve => {
       client.get('comments', (err, data) => {
-        const comment = JSON.parse(data) || [];
-        resolve(comment);
+        const comment = data || '[]';
+        resolve(JSON.parse(comment));
       });
       client.quit();
     });
   }
+
   async save(commentDetail) {
     const commentFile = await this.getComment();
     this.date = new Date();

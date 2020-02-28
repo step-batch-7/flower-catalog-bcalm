@@ -10,6 +10,7 @@ class Comment {
     return new Promise(resolve => {
       client.get('comments', (err, data) => {
         const comment = data || '[]';
+        console.log(data);
         resolve(JSON.parse(comment));
       });
       client.quit();
@@ -24,7 +25,8 @@ class Comment {
     const {name, comment, date} = this;
     const commentList = {name, date, comment};
     commentFile.unshift(commentList);
-    const client = redis.createClient();
+    const client = redis.createClient(url);
+    client.set('name', 'vikram');
     client.set('comments', JSON.stringify(commentFile));
     client.quit();
   }

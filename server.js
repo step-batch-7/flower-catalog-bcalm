@@ -7,4 +7,4 @@ const server = new http.Server((req, res) => {
   app.serve(req, res);
 });
 
-server.listen(port);
+server.listen(port, () => console.log('listening at', port));

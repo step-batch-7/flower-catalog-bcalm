@@ -8,8 +8,8 @@
     "lib": "lib"
   },
   "scripts": {
-    "test": "export COMMENTS_STORE_PATH=\"test/resources/comments.json\"; nyc mocha",
-    "start": "export COMMENTS_STORE_PATH=\"dataBase/commentList.json\"; node server.js "
+    "test":  nyc mocha",
+    "start":  node server.js "
   },
   "repository": {
     "type": "git",
